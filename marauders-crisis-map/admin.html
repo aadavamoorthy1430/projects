@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Admin Command Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .filter-bar {
+        background: var(--bg-alt);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+      }
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+        min-width: 160px;
+      }
+      .filter-group label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+      .filter-group select {
+        padding: 0.5rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--text);
+      }
+      .btn-export {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 0.55rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        height: fit-content;
+      }
+      .btn-export:hover {
+        background-color: #059669;
+      }
+      .admin-badge {
+        background-color: #4f46e5;
+        color: #ffffff;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="admin.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Admin Command Center <span class="admin-badge">Full Access</span></span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a class="active" href="admin.html">Admin Portal</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <section class="section">
+          <h3>Master Campus Incident Board</h3>
+          <p>
+            Central command overview for system administrators. View, filter, and override incident status logs across all hostel blocks and campus zones in real time.
+          </p>
+        </section>
+
+        <!-- Global Campus Stats -->
+        <div class="hero-cta" style="margin-bottom: 2rem; justify-content: space-between;">
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.85rem; text-transform: uppercase; opacity: 0.8;">Total Campus Incidents</h4>
+            <span id="admin-total-count" style="font-size: 2rem; font-weight: bold; color: #4f46e5;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.85rem; text-transform: uppercase; color: #d9534f;">Open Alerts</h4>
+            <span id="admin-open-count" style="font-size: 2rem; font-weight: bold; color: #d9534f;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.85rem; text-transform: uppercase; color: #f0ad4e;">In Progress</h4>
+            <span id="admin-progress-count" style="font-size: 2rem; font-weight: bold; color: #f0ad4e;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center;">
+            <h4 style="margin: 0; font-size: 0.85rem; text-transform: uppercase; color: #5cb85c;">Resolved</h4>
+            <span id="admin-resolved-count" style="font-size: 2rem; font-weight: bold; color: #5cb85c;">0</span>
+          </div>
+        </div>
+
+        <!-- Filter Controls & Export Button -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="filter-status">Filter by Status</label>
+            <select id="filter-status" onchange="applyAdminFilters()">
+              <option value="all">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="In progress">In progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-type">Filter by Incident Type</label>
+            <select id="filter-type" onchange="applyAdminFilters()">
+              <option value="all">All Types</option>
+              <option value="Flooding">Flooding</option>
+              <option value="Fire / Smoke">Fire / Smoke</option>
+              <option value="Medical">Medical</option>
+              <option value="Power outage">Power outage</option>
+              <option value="Security">Security</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+
+          <!-- Export CSV Button -->
+          <button class="btn-export" onclick="exportIncidentsToCSV()">📥 Export CSV</button>
+        </div>
+
+        <!-- Master Incident Log Table -->
+        <section class="incident-layout" style="grid-template-columns: 1fr;">
+          <div class="incident-table-wrapper">
+            <h3>Master Incident Register</h3>
+            <div class="table-scroll">
+              <table id="admin-incident-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Location / Room</th>
+                    <th>Type</th>
+                    <th>Severity</th>
+                    <th>Description / Notes</th>
+                    <th>Status</th>
+                    <th>Admin Override</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Clean state: Dynamic rows inserted via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Admin Command Center</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        loadLocalStorageIncidents();
+        calculateAdminStats();
+      });
+
+      // Load dynamically created incidents from localStorage into the admin table
+      function loadLocalStorageIncidents() {
+        const tbody = document.querySelector("#admin-incident-table tbody");
+        const savedIncidents = localStorage.getItem("incidents");
+
+        if (tbody) {
+          tbody.innerHTML = "";
+        }
+
+        if (savedIncidents && tbody) {
+          let incidentsArray = JSON.parse(savedIncidents);
+          let isModified = false;
+
+          incidentsArray.forEach((inc) => {
+            // Assign permanent ID if missing and persist back to localStorage
+            if (!inc.id) {
+              inc.id = '#INC-' + Math.floor(1000 + Math.random() * 9000);
+              isModified = true;
+            }
+
+            const row = document.createElement("tr");
+            row.setAttribute("data-id", inc.id);
+            row.setAttribute("data-time", inc.time || "");
+            row.setAttribute("data-location", inc.location || "");
+            row.setAttribute("data-type", inc.type || "Other");
+            row.setAttribute("data-status", inc.status || "Open");
+
+            row.innerHTML = `
+              <td>${inc.id}</td>
+              <td>${inc.time || 'N/A'}</td>
+              <td>${inc.location || 'N/A'}</td>
+              <td>${inc.type || 'N/A'}</td>
+              <td>${inc.severity || 'N/A'}</td>
+              <td>${inc.notes || 'N/A'}</td>
+              <td><span class="zone-status-pill ${inc.status === 'Resolved' ? 'ok' : 'alert'}">${inc.status}</span></td>
+              <td>
+                <select onchange="updateAdminStatus(this)">
+                  <option value="Open" ${inc.status === 'Open' ? 'selected' : ''}>Open</option>
+                  <option value="In progress" ${inc.status === 'In progress' ? 'selected' : ''}>In progress</option>
+                  <option value="Resolved" ${inc.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+                </select>
+              </td>
+            `;
+            tbody.prepend(row);
+          });
+
+          // Save assigned IDs back so they remain constant across future refreshes
+          if (isModified) {
+            localStorage.setItem("incidents", JSON.stringify(incidentsArray));
+          }
+        }
+      }
+
+      // Handle updating status, updating UI, and persisting changes permanently in localStorage
+      function updateAdminStatus(selectElement) {
+        const row = selectElement.closest('tr');
+        const incidentId = row.getAttribute("data-id");
+        const rowTime = row.getAttribute("data-time");
+        const rowLocation = row.getAttribute("data-location");
+        const statusCell = row.cells[6];
+        const newStatus = selectElement.value;
+
+        row.setAttribute("data-status", newStatus);
+
+        if (newStatus === 'Resolved') {
+          statusCell.innerHTML = `<span class="zone-status-pill ok">${newStatus}</span>`;
+        } else {
+          statusCell.innerHTML = `<span class="zone-status-pill alert">${newStatus}</span>`;
+        }
+
+        // Persist update in main dynamic 'incidents' storage array
+        const savedIncidents = localStorage.getItem("incidents");
+        if (savedIncidents) {
+          const incidentsArray = JSON.parse(savedIncidents);
+          
+          // Primary search by ID; Secondary search fallback by location + time
+          let foundIndex = incidentsArray.findIndex((inc) => inc.id === incidentId);
+          if (foundIndex === -1) {
+            foundIndex = incidentsArray.findIndex((inc) => inc.location === rowLocation && inc.time === rowTime);
+          }
+
+          if (foundIndex !== -1) {
+            incidentsArray[foundIndex].status = newStatus;
+            localStorage.setItem("incidents", JSON.stringify(incidentsArray));
+          }
+        }
+
+        calculateAdminStats();
+      }
+
+      // Filter rows based on Status and Type dropdowns
+      function applyAdminFilters() {
+        const selectedStatus = document.getElementById("filter-status").value;
+        const selectedType = document.getElementById("filter-type").value;
+
+        const rows = document.querySelectorAll("#admin-incident-table tbody tr");
+
+        rows.forEach((row) => {
+          const rowStatus = row.getAttribute("data-status");
+          const rowType = row.getAttribute("data-type");
+
+          const matchesStatus = selectedStatus === "all" || rowStatus === selectedStatus;
+          const matchesType = selectedType === "all" || rowType === selectedType;
+
+          if (matchesStatus && matchesType) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+
+        calculateAdminStats();
+      }
+
+      // Calculate total statistics dynamically from visible table rows
+      function calculateAdminStats() {
+        const rows = Array.from(document.querySelectorAll("#admin-incident-table tbody tr"))
+          .filter(row => row.style.display !== "none");
+
+        let openCount = 0;
+        let progressCount = 0;
+        let resolvedCount = 0;
+
+        rows.forEach((row) => {
+          const status = row.getAttribute("data-status");
+          if (status === "Open") openCount++;
+          else if (status === "In progress") progressCount++;
+          else if (status === "Resolved") resolvedCount++;
+        });
+
+        document.getElementById("admin-total-count").textContent = rows.length;
+        document.getElementById("admin-open-count").textContent = openCount;
+        document.getElementById("admin-progress-count").textContent = progressCount;
+        document.getElementById("admin-resolved-count").textContent = resolvedCount;
+      }
+
+      // Export all stored incident records to CSV
+      function exportIncidentsToCSV() {
+        const savedIncidents = localStorage.getItem("incidents");
+        if (!savedIncidents) {
+          alert("No incident records available to export.");
+          return;
+        }
+
+        const incidents = JSON.parse(savedIncidents);
+        if (incidents.length === 0) {
+          alert("No incident records available to export.");
+          return;
+        }
+
+        // Define headers for the CSV
+        const headers = ["ID", "Time", "Location", "Type", "Severity", "Description / Notes", "Status"];
+        
+        // Escape values to safely handle commas and double quotes in text fields
+        const escapeCSV = (value) => {
+          if (value === null || value === undefined) return '""';
+          const str = String(value).replace(/"/g, '""');
+          return `"${str}"`;
+        };
+
+        const csvRows = [];
+        csvRows.push(headers.join(","));
+
+        incidents.forEach((inc) => {
+          const row = [
+            escapeCSV(inc.id || 'N/A'),
+            escapeCSV(inc.time || 'N/A'),
+            escapeCSV(inc.location || 'N/A'),
+            escapeCSV(inc.type || 'N/A'),
+            escapeCSV(inc.severity || 'N/A'),
+            escapeCSV(inc.notes || 'N/A'),
+            escapeCSV(inc.status || 'Open')
+          ];
+          csvRows.push(row.join(","));
+        });
+
+        const csvContent = csvRows.join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.setAttribute("download", `incidents_export_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>

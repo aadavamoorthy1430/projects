@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Incident Log</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    
+    <!-- Leaflet CSS -->
+    <link 
+      rel="stylesheet" 
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+      crossorigin="" 
+    />
+    
+    <style>
+      .map-embed-card {
+        margin-bottom: 2rem;
+        background: var(--bg-alt, #ffffff);
+        border: 1px solid var(--border, #e5e7eb);
+        border-radius: var(--radius, 8px);
+        padding: 1.25rem;
+        box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,0.1));
+      }
+      .section-kicker {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted, #6b7280);
+        margin-bottom: 0.25rem;
+      }
+      .map-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        font-weight: 600;
+        color: var(--primary, #4f46e5);
+        text-decoration: none;
+      }
+      .map-link:hover {
+        text-decoration: underline;
+      }
+      /* Mandatory height & styling for Leaflet container */
+      #incident-map {
+        width: 100%;
+        height: 380px;
+        min-height: 380px;
+        border-radius: 6px;
+        margin: 1rem 0;
+        background: #e5e7eb; /* Placeholder color while tiles load */
+        position: relative;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Incident status board</span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="map.html">Live Map</a></li>
+            <li><a class="active" href="incidents.html">Incident Log</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <section class="section">
+          <h3>Live incident log</h3>
+        </section>
+
+        <!-- Live Campus Location Layer Card -->
+        <section class="map-embed-card">
+          <div>
+            <p class="section-kicker">VIT Chennai Base Map</p>
+            <h3 style="margin-top: 0;">Real campus location layer</h3>
+            <p>Centered on VIT Chennai, Vandalur-Kelambakkam Road, using approximate campus coordinates 12.8419815, 80.1549340.</p>
+          </div>
+
+          <!-- Interactive Map Container -->
+          <div id="incident-map"></div>
+
+          <a class="map-link" href="https://www.openstreetmap.org/?mlat=12.8419815&amp;mlon=80.1549340#map=16/12.8419815/80.1549340" target="_blank" rel="noreferrer">
+            Open VIT Chennai in OpenStreetMap ↗️
+          </a>
+        </section>
+
+        <section class="incident-layout">
+          <form id="incident-form" class="incident-form">
+            <h3>Quick incident entry</h3>
+
+            <!-- Hostel Block Dropdown -->
+            <div class="form-row form-row-2">
+              <label>
+                Hostel Block
+                <select name="hostel_block" required>
+                  <option value="" disabled selected>Select Hostel Block</option>
+                  <option value="block-a">Block A (Men's Hostel)</option>
+                  <option value="block-b">Block B (Women's Hostel)</option>
+                  <option value="block-c">Block C (Women's Hostel)</option>
+                  <option value="block-d1">Block D1 (Men's Hostel)</option>
+                  <option value="block-d2">Block D2 (Men's Hostel)</option>
+                  <option value="block-e">Block E (Men's Hostel)</option>
+                </select>
+              </label>
+
+              <label>
+                Location Details
+                <input
+                  type="text"
+                  name="location"
+                  required
+                  placeholder="e.g. Room 302, Corridor 2"
+                />
+              </label>
+            </div>
+
+            <div class="form-row form-row-2">
+              <label>
+                Type
+                <select name="type">
+                  <option value="Flooding">Flooding</option>
+                  <option value="Fire / Smoke">Fire / Smoke</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Power outage">Power outage</option>
+                  <option value="Security">Security</option>
+                  <option value="Maintenance">Maintenance</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+
+              <label>
+                Severity (1–5)
+                <input
+                  type="number"
+                  name="severity"
+                  min="1"
+                  max="5"
+                  value="3"
+                />
+              </label>
+            </div>
+
+            <div class="form-row form-row-2">
+              <label>
+                Status
+                <input
+                  type="text"
+                  name="status"
+                  value="Open"
+                  readonly
+                />
+              </label>
+
+              <label>
+                Notes (optional)
+                <textarea
+                  name="notes"
+                  placeholder="Short details for the control room log..."
+                ></textarea>
+              </label>
+            </div>
+
+            <button class="btn" type="submit">Add to log</button>
+          </form>
+
+          <div class="incident-table-wrapper">
+            <h3>Current incidents</h3>
+            <div class="table-scroll">
+              <table id="incident-table">
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Incident Log</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+
+    <!-- Leaflet JS Library -->
+    <script 
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+      crossorigin="">
+    </script>
+
+    <!-- External Script -->
+    <script src="script.js"></script>
+
+    <!-- Map Marker Sync Script -->
+    <script>
+      window.addEventListener("load", () => {
+        const blockCoords = {
+          "block-a": [12.8428, 80.1538],
+          "block-b": [12.8432, 80.1545],
+          "block-c": [12.8430, 80.1550],
+          "block-d1": [12.8420, 80.1528],
+          "block-d2": [12.8422, 80.1522],
+          "block-e": [12.8415, 80.1535]
+        };
+
+        const defaultCenter = [12.8419815, 80.1549340];
+
+        // 1. Initialize Map
+        const map = L.map("incident-map").setView(defaultCenter, 16);
+
+        // 2. Add OpenStreetMap Tile Layer
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // 3. Force calculation of map viewport bounds to prevent blank display
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 200);
+
+        const markersGroup = L.layerGroup().addTo(map);
+
+        // Render markers from local storage
+        function renderMapMarkers() {
+          markersGroup.clearLayers();
+          const savedIncidents = localStorage.getItem("incidents");
+
+          if (savedIncidents) {
+            try {
+              const incidents = JSON.parse(savedIncidents);
+              incidents.forEach((inc) => {
+                const blockKey = inc.hostelBlock ? inc.hostelBlock.toLowerCase() : "";
+                
+                const base = blockCoords[blockKey] || defaultCenter;
+                const lat = base[0] + (Math.random() - 0.5) * 0.0006;
+                const lng = base[1] + (Math.random() - 0.5) * 0.0006;
+
+                const marker = L.marker([lat, lng]).addTo(markersGroup);
+                marker.bindPopup(`
+                  <strong style="font-size:1.05rem;">${inc.type || "Incident"}</strong><br/>
+                  <b>Block:</b> ${inc.hostelBlock || "N/A"}<br/>
+                  <b>Location:</b> ${inc.location || "N/A"}<br/>
+                  <b>Severity:</b> ${inc.severity || "N/A"}<br/>
+                  <b>Status:</b> ${inc.status || "Open"}
+                `);
+              });
+            } catch (e) {
+              console.error("Error reading localStorage incidents:", e);
+            }
+          }
+        }
+
+        renderMapMarkers();
+
+        const form = document.getElementById("incident-form");
+        if (form) {
+          form.addEventListener("submit", () => {
+            setTimeout(renderMapMarkers, 150);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

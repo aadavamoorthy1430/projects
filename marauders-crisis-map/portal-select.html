@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Select Role</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      html, body, main, .site-shell {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+      }
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 200px);
+        padding: 2rem 1rem;
+      }
+      .login-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 440px;
+        text-align: center;
+      }
+      .login-card h2 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1.75rem;
+        color: #1a1a1a;
+      }
+      .login-card p {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+      .portal-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .portal-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        text-decoration: none;
+        color: #ffffff;
+        border-radius: 8px;
+        transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .portal-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .portal-btn.student { background-color: #2563eb; }
+      .portal-btn.student:hover { background-color: #1d4ed8; }
+      .portal-btn.warden { background-color: #0d9488; }
+      .portal-btn.warden:hover { background-color: #0f766e; }
+      .portal-btn.admin { background-color: #4f46e5; }
+      .portal-btn.admin:hover { background-color: #4338ca; }
+      .portal-btn .role-desc {
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="portal-select.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Campus Incident Command Center</span>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <div class="login-container">
+          <div class="login-card">
+            <h2>Portal Access</h2>
+            <p>Select your role to proceed to authentication</p>
+
+            <div class="portal-links">
+              <!-- Student Login Link -->
+              <a href="student-login.html" class="portal-btn student">
+                <span>Student Portal</span>
+                <span class="role-desc">Login &rarr;</span>
+              </a>
+
+              <!-- Warden Login Link -->
+              <a href="warden-login.html" class="portal-btn warden">
+                <span>Warden Portal</span>
+                <span class="role-desc">Login &rarr;</span>
+              </a>
+
+              <!-- Admin Login Link -->
+              <a href="admin-login.html" class="portal-btn admin">
+                <span>Admin Portal</span>
+                <span class="role-desc">Login &rarr;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Command Dashboard</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+  </body>
+</html>

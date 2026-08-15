@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Force all parent containers to full width */
+      html, body, main, .site-shell, .hero, .hero-text {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Force inner text elements to span the full available horizontal space */
+      .hero-text h2,
+      .hero-text p {
+        width: 100% !important;
+        max-width: none !important;
+        display: block !important;
+      }
+
+      /* Center and resize CTA buttons */
+      .hero-cta {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 20px !important;
+        margin-top: 2rem !important;
+        width: 100% !important;
+      }
+
+      .hero-cta .btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 16px 36px !important;
+        font-size: 1.25rem !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        border-radius: 50px !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+      }
+
+      .hero-cta .btn:hover {
+        transform: translateY(-2px) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Campus Incident Command Center</span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a class="active" href="index.html">Home</a></li>
+            <li><a href="map.html">Live Map</a></li>
+            <li><a href="incidents.html">Incident Log</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+
+        <!-- Section 1: Hero & Product Overview -->
+        <section class="hero">
+          <div class="hero-text">
+            <h2>Real-time command center for campus safety.</h2>
+            <p>
+              Marauder's Crisis Map is a full-stack emergency coordination platform used on university and college campuses. It gives staff a single screen to see what is happening, where it is happening, and who is on the way.
+            </p>
+            <p>
+              Replace panic and noise with a calm, reliable command center that keeps your campus safe during critical events.
+            </p>
+            <div class="hero-cta">
+              <a href="map.html" class="btn">View Live Map</a>
+              <a href="incidents.html" class="btn outline">Report Incident</a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Command Dashboard</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

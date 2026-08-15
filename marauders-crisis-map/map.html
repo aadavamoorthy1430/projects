@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Live Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Live campus map</span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a class="active" href="map.html">Live Map</a></li>
+            <li><a href="incidents.html">Incident Log</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <section class="section">
+          <h3>Interactive campus crisis map</h3>
+          <p>
+            Click a zone to see its current status, open reports, and guidance.
+            In a full build this would be backed by real-time data from mobile
+            clients.
+          </p>
+
+          <div class="map-layout">
+            <div>
+              <div class="map-zones" id="map-zones-container">
+                <!-- Static fallback zones -->
+                <button
+                  class="zone"
+                  type="button"
+                  data-zone
+                  data-name="AB1 third floor"
+                  data-status="Evacuating"
+                  data-reports="6"
+                  data-severity="High – standing water and injured students"
+                  data-guidance="Keep stairwells clear, route responders through East stair, deploy stretcher team."
+                >
+                  <strong>AB1</strong>
+                  <span>Third Floor</span>
+                  <span class="zone-status-pill alert">Evacuating</span>
+                </button>
+
+                <button
+                  class="zone"
+                  type="button"
+                  data-zone
+                  data-name="MG auditorium"
+                  data-status="Shelter in place"
+                  data-reports="2"
+                  data-severity="Medium – temporary power loss"
+                  data-guidance="Hold students inside, distribute lanterns, wait for green signal from control room."
+                >
+                  <strong>MG auditorium</strong>
+                  <span>Assembly point</span>
+                  <span class="zone-status-pill alert">Shelter</span>
+                </button>
+
+                <button
+                  class="zone"
+                  type="button"
+                  data-zone
+                  data-name="Library"
+                  data-status="Monitoring"
+                  data-reports="1"
+                  data-severity="Low – minor smoke smell, no visible fire"
+                  data-guidance="Send warden to verify, keep exits clear, prepare to move students if status escalates."
+                >
+                  <strong>Library</strong>
+                  <span>Silent study</span>
+                  <span class="zone-status-pill ok">Monitoring</span>
+                </button>
+
+                <button
+                  class="zone"
+                  type="button"
+                  data-zone
+                  data-name="Cricket Ground"
+                  data-status="All clear"
+                  data-reports="0"
+                  data-severity="None – training cancelled due to storm"
+                  data-guidance="Keep lights off, mark pitch as closed in the student app to avoid new crowds."
+                >
+                  <strong>Cricket Ground</strong>
+                  <span>Outdoor field</span>
+                  <span class="zone-status-pill ok">All clear</span>
+                </button>
+              </div>
+            </div>
+
+            <aside id="zone-info" class="map-detail" aria-live="polite">
+              <!-- Filled dynamically -->
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Map view</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // Run after script.js and DOM are completely loaded
+      window.addEventListener("load", () => {
+        initLiveMap();
+      });
+
+      function initLiveMap() {
+        const container = document.getElementById("map-zones-container");
+        const zoneInfo = document.getElementById("zone-info");
+        const savedIncidents = localStorage.getItem("incidents");
+
+        if (!container) return;
+
+        // Fetch user reported incidents from localStorage
+        if (savedIncidents) {
+          try {
+            const incidents = JSON.parse(savedIncidents);
+
+            incidents.forEach((inc) => {
+              const btn = document.createElement("button");
+              btn.className = "zone";
+              btn.type = "button";
+              btn.setAttribute("data-zone", "");
+              btn.setAttribute("data-name", inc.location || "Unknown Location");
+              btn.setAttribute("data-status", inc.status || "Open");
+              btn.setAttribute("data-reports", "1");
+              btn.setAttribute("data-severity", `${inc.severity || 'Medium'} – ${inc.type || 'Incident'}`);
+              btn.setAttribute("data-guidance", inc.notes || "No specific guidance recorded for this incident.");
+
+              const isOk = (inc.status === "Resolved" || inc.status === "All clear");
+              const pillClass = isOk ? "ok" : "alert";
+
+              btn.innerHTML = `
+                <strong>${inc.location || 'Incident Zone'}</strong>
+                <span>${inc.type || 'Alert'}</span>
+                <span class="zone-status-pill ${pillClass}">${inc.status || 'Open'}</span>
+              `;
+
+              // Prepend logged incidents at the top of the container
+              container.prepend(btn);
+            });
+          } catch (e) {
+            console.error("Error reading localStorage incidents:", e);
+          }
+        }
+
+        // Dedicated click handler for all buttons (static + dynamic)
+        container.addEventListener("click", (e) => {
+          const zoneBtn = e.target.closest(".zone");
+          if (!zoneBtn) return;
+
+          document.querySelectorAll(".zone").forEach((z) => z.classList.remove("selected"));
+          zoneBtn.classList.add("selected");
+
+          const name = zoneBtn.getAttribute("data-name") || "N/A";
+          const status = zoneBtn.getAttribute("data-status") || "N/A";
+          const reports = zoneBtn.getAttribute("data-reports") || "0";
+          const severity = zoneBtn.getAttribute("data-severity") || "N/A";
+          const guidance = zoneBtn.getAttribute("data-guidance") || "N/A";
+
+          const isOk = status === "All clear" || status === "Resolved";
+          const pillClass = isOk ? "ok" : "alert";
+
+          if (zoneInfo) {
+            zoneInfo.innerHTML = `
+              <h3>${name}</h3>
+              <p><span class="zone-status-pill ${pillClass}">${status}</span></p>
+              <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border, #e5e7eb);" />
+              <p><strong>Reports:</strong> ${reports}</p>
+              <p><strong>Severity:</strong> ${severity}</p>
+              <p><strong>Guidance:</strong> ${guidance}</p>
+            `;
+          }
+        });
+
+        // Trigger selection on the first available zone
+        const firstZone = container.querySelector(".zone");
+        if (firstZone) {
+          firstZone.click();
+        }
+      }
+    </script>
+  </body>
+</html>

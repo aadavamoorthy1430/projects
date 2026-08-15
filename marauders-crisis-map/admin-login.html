@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Login – Marauder's Crisis Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      html, body, main, .site-shell { width: 100% !important; margin: 0 !important; box-sizing: border-box !important; }
+      .login-container { display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 200px); padding: 2rem 1rem; }
+      .login-card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); padding: 2.5rem; width: 100%; max-width: 420px; border-top: 5px solid #4f46e5; }
+      .login-card h2 { margin-top: 0; margin-bottom: 0.5rem; color: #1e293b; }
+      .login-card p { color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem; }
+      .form-group { margin-bottom: 1.25rem; text-align: left; }
+      .form-group label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem; }
+      .form-group input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem; }
+      .form-group input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+      .submit-btn { width: 100%; padding: 0.85rem; background-color: #4f46e5; color: #ffffff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+      .submit-btn:hover { background-color: #4338ca; }
+      .back-link { display: block; margin-top: 1.25rem; font-size: 0.85rem; color: #64748b; text-decoration: none; text-align: center; }
+      .back-link:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="login.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Campus Incident Command Center</span>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <div class="login-container">
+          <div class="login-card">
+            <h2>Admin Control Access</h2>
+            <p>Administrator credentials required to open core system management.</p>
+            
+            <form action="admin.html" method="GET">
+              <div class="form-group">
+                <label for="admin-email">Username or Email</label>
+                <input type="text" id="admin-email" name="admin_user" placeholder="admin@campus.edu" required />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required />
+              </div>
+              <button type="submit" class="submit-btn">Login as Admin</button>
+            </form>
+
+            <a href="login.html" class="back-link">&larr; Back to Role Selection</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Admin Login</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+  </body>
+</html>

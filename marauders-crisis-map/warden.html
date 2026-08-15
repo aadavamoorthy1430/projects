@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Marauder's Crisis Map – Warden Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="#" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Warden Portal & Management</span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+          <ul>
+            <li><a class="active" href="warden.html">Warden Portal</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <section class="section">
+          <h3>Student Incident Reports</h3>
+          <p>
+            Review, track, and update the status of incidents reported by campus students in real time.
+          </p>
+        </section>
+
+        <!-- Summary Stats Cards -->
+        <div class="hero-cta" style="margin-bottom: 2rem; justify-content: space-between;">
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.9rem; text-transform: uppercase; opacity: 0.8;">Total Reported</h4>
+            <span id="total-count" style="font-size: 2rem; font-weight: bold;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.9rem; text-transform: uppercase; color: #d9534f;">Pending / Open</h4>
+            <span id="open-count" style="font-size: 2rem; font-weight: bold; color: #d9534f;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center; margin-right: 10px;">
+            <h4 style="margin: 0; font-size: 0.9rem; text-transform: uppercase; color: #f0ad4e;">In Progress</h4>
+            <span id="progress-count" style="font-size: 2rem; font-weight: bold; color: #f0ad4e;">0</span>
+          </div>
+          <div class="incident-form" style="flex: 1; text-align: center;">
+            <h4 style="margin: 0; font-size: 0.9rem; text-transform: uppercase; color: #5cb85c;">Resolved</h4>
+            <span id="resolved-count" style="font-size: 2rem; font-weight: bold; color: #5cb85c;">0</span>
+          </div>
+        </div>
+
+        <section class="incident-layout" style="grid-template-columns: 1fr;">
+          <div class="incident-table-wrapper">
+            <h3>Reported Incidents Overview</h3>
+            <div class="table-scroll">
+              <table id="warden-incident-table">
+                <thead>
+                  <tr>
+                    <th>Report ID</th>
+                    <th>Time</th>
+                    <th>Hostel Block</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Severity</th>
+                    <th>Description / Notes</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-hostel-block="block-b" data-status="Open">
+                    <td>#INC-104</td>
+                    <td>21:15</td>
+                    <td>block-b</td>
+                    <td>Hostel Block B - Room 204</td>
+                    <td>Medical</td>
+                    <td>4</td>
+                    <td>Student experiencing severe asthma attack. Needs first aid kit.</td>
+                    <td><span class="zone-status-pill alert">Open</span></td>
+                    <td>
+                      <select onchange="updateStatus(this)">
+                        <option value="Open" selected>Open</option>
+                        <option value="In progress">In progress</option>
+                        <option value="Resolved">Resolved</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr data-hostel-block="block-d1" data-status="In progress">
+                    <td>#INC-103</td>
+                    <td>21:07</td>
+                    <td>block-d1</td>
+                    <td>AB1 Third Floor</td>
+                    <td>Flooding</td>
+                    <td>4</td>
+                    <td>Pipe burst near eastern restrooms; water overflowing into corridor.</td>
+                    <td><span class="zone-status-pill alert">In progress</span></td>
+                    <td>
+                      <select onchange="updateStatus(this)">
+                        <option value="Open">Open</option>
+                        <option value="In progress" selected>In progress</option>
+                        <option value="Resolved">Resolved</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr data-hostel-block="block-c" data-status="Open">
+                    <td>#INC-102</td>
+                    <td>20:55</td>
+                    <td>block-c</td>
+                    <td>Library - 2nd Floor</td>
+                    <td>Smoke / Fire</td>
+                    <td>3</td>
+                    <td>Burning plastic odor near main server rack area.</td>
+                    <td><span class="zone-status-pill alert">Open</span></td>
+                    <td>
+                      <select onchange="updateStatus(this)">
+                        <option value="Open" selected>Open</option>
+                        <option value="In progress">In progress</option>
+                        <option value="Resolved">Resolved</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr data-hostel-block="block-a" data-status="Resolved">
+                    <td>#INC-101</td>
+                    <td>19:40</td>
+                    <td>block-a</td>
+                    <td>Hostel Block A Dining Hall</td>
+                    <td>Maintenance</td>
+                    <td>2</td>
+                    <td>Main door latch broken, glass panel loose.</td>
+                    <td><span class="zone-status-pill ok">Resolved</span></td>
+                    <td>
+                      <select onchange="updateStatus(this)">
+                        <option value="Open">Open</option>
+                        <option value="In progress">In progress</option>
+                        <option value="Resolved" selected>Resolved</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Warden Portal</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      function calculateWardenStats() {
+        const rows = Array.from(document.querySelectorAll("#warden-incident-table tbody tr"))
+          .filter(row => row.style.display !== "none");
+
+        let openCount = 0;
+        let progressCount = 0;
+        let resolvedCount = 0;
+
+        rows.forEach((row) => {
+          const select = row.querySelector("select");
+          const status = select ? select.value : row.getAttribute("data-status");
+          if (status === "Open") openCount++;
+          else if (status === "In progress") progressCount++;
+          else if (status === "Resolved") resolvedCount++;
+        });
+
+        document.getElementById("total-count").textContent = rows.length;
+        document.getElementById("open-count").textContent = openCount;
+        document.getElementById("progress-count").textContent = progressCount;
+        document.getElementById("resolved-count").textContent = resolvedCount;
+      }
+
+      function updateStatus(selectElement) {
+        const row = selectElement.closest('tr');
+        const statusCell = row.cells[7];
+        const newStatus = selectElement.value;
+
+        row.setAttribute("data-status", newStatus);
+
+        if (newStatus === 'Resolved') {
+          statusCell.innerHTML = `<span class="zone-status-pill ok">${newStatus}</span>`;
+        } else {
+          statusCell.innerHTML = `<span class="zone-status-pill alert">${newStatus}</span>`;
+        }
+
+        calculateWardenStats();
+      }
+
+      // Run stat calculation after script.js filters rows on page load
+      window.addEventListener("load", () => {
+        setTimeout(calculateWardenStats, 100);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Warden Login – Marauder's Crisis Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      html, body, main, .site-shell { 
+        width: 100% !important; 
+        margin: 0 !important; 
+        box-sizing: border-box !important; 
+      }
+      .login-container { 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        min-height: calc(100vh - 200px); 
+        padding: 2rem 1rem; 
+      }
+      .login-card { 
+        background: #ffffff; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+        padding: 2.5rem; 
+        width: 100%; 
+        max-width: 420px; 
+        border-top: 5px solid #0d9488; 
+      }
+      .login-card h2 { 
+        margin-top: 0; 
+        margin-bottom: 0.5rem; 
+        color: #1e293b; 
+      }
+      .login-card p { 
+        color: #64748b; 
+        font-size: 0.9rem; 
+        margin-bottom: 1.5rem; 
+      }
+      .form-group { 
+        margin-bottom: 1.25rem; 
+        text-align: left; 
+      }
+      .form-group label { 
+        display: block; 
+        font-size: 0.875rem; 
+        font-weight: 600; 
+        color: #334155; 
+        margin-bottom: 0.35rem; 
+      }
+      .form-group input, .form-group select { 
+        width: 100%; 
+        padding: 0.75rem; 
+        border: 1px solid #cbd5e1; 
+        border-radius: 6px; 
+        box-sizing: border-box; 
+        font-size: 0.95rem; 
+      }
+      .form-group input:focus, .form-group select:focus { 
+        outline: none; 
+        border-color: #0d9488; 
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15); 
+      }
+      .submit-btn { 
+        width: 100%; 
+        padding: 0.85rem; 
+        background-color: #0d9488; 
+        color: #ffffff; 
+        border: none; 
+        border-radius: 6px; 
+        font-size: 1rem; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: background-color 0.2s; 
+      }
+      .submit-btn:hover { 
+        background-color: #0f766e; 
+      }
+      .back-link { 
+        display: block; 
+        margin-top: 1.25rem; 
+        font-size: 0.85rem; 
+        color: #64748b; 
+        text-decoration: none; 
+        text-align: center; 
+      }
+      .back-link:hover { 
+        text-decoration: underline; 
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1>Marauder's Crisis Map</h1>
+            <span>Campus Incident Command Center</span>
+          </div>
+        </a>
+        <nav aria-label="Main navigation">
+
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="site-shell">
+        <div class="login-container">
+          <div class="login-card">
+            <h2>Warden Access</h2>
+            <p>Select your assigned block and sign in to manage hostel security.</p>
+            
+            <form action="warden.html" method="GET">
+              <div class="form-group">
+                <label for="hostel-block">Hostel Block</label>
+                <select id="hostel-block" name="hostel_block" required>
+                  <option value="" disabled selected>Select Hostel Block</option>
+                  <option value="block-a">Block A (Men's Hostel)</option>
+                  <option value="block-b">Block B (Women's Hostel)</option>
+                  <option value="block-c">Block C (Women's Hostel)</option>
+                  <option value="block-d1">Block D1 (Men's Hostel)</option>
+                  <option value="block-d2">Block D2 (Men's Hostel)</option>
+                  <option value="block-e">Block E (Men's Hostel)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="warden-id">Warden ID</label>
+                <input type="text" id="warden-id" name="warden_id" placeholder="e.g., WDN-104" required />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required />
+              </div>
+              <button type="submit" class="submit-btn">Login as Warden</button>
+            </form>
+
+            <a href="login.html" class="back-link">&larr; Back to Role Selection</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Marauder's Crisis Map – Warden Login</div>
+        <div>By Team Half Blood Thinkers</div>
+      </div>
+    </footer>
+  </body>
+</html>
